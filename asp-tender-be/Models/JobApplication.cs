@@ -31,7 +31,13 @@ namespace asp_tender_be.Models
         public string Phone { get; set; }
 
         [Required]
-        public byte[] Cv { get; set; }
+        public byte[] CvData { get; set; }
+
+        [Required]
+        public string CvMimeType { get; set; }
+
+        [Required]
+        public string CvFileName { get; set; }
 
         public virtual Position Position { get; set; }
         public virtual JobApplicationAnswer JobApplicationAnswer { get; set; }

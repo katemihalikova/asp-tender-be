@@ -39,11 +39,10 @@ namespace asp_tender_be.ApiControllers
 
             using (var memoryStream = new MemoryStream())
             {
-                var jobApplication = new JobApplication { PositionID = form.PositionID, Text = form.Text, Email = form.Email, Phone = form.Phone, CreatedAt = DateTime.Now };
+                var jobApplication = new JobApplication { PositionID = form.PositionID, Text = form.Text, Email = form.Email, Phone = form.Phone, CvMimeType = form.Cv.ContentType, CvFileName = form.Cv.FileName, CreatedAt = DateTime.Now };
 
-                // @TODO save also file name and mime type to db!!
                 await form.Cv.CopyToAsync(memoryStream);
-                jobApplication.Cv = memoryStream.ToArray();
+                jobApplication.CvData = memoryStream.ToArray();
 
                 _repository.InsertJobApplication(jobApplication);
                 await _repository.Save();
@@ -65,7 +64,7 @@ namespace asp_tender_be.ApiControllers
                 return NotFound();
             }
 
-            return new FileContentResult(jobApplication.Cv, "application/octet-stream");
+            return new FileContentResult(jobApplication.CvData, jobApplication.CvMimeType) { FileDownloadName = jobApplication.CvFileName };
         }
     }
 }
