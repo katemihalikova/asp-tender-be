@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using asp_tender_be.Data;
 using asp_tender_be.Services;
+using asp_tender_be.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -31,7 +32,9 @@ namespace asp_tender_be
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IJobApplicationsHubConnector, JobApplicationsHubConnector>();
 
+            services.AddSignalR();
             services.AddCors();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -50,6 +53,7 @@ namespace asp_tender_be
                 app.UseExceptionHandler("/Error");
             }
 
+            app.UseSignalR(routes => routes.MapHub<JobApplicationsHub>("/jobApplicationsHub"));
             app.UseCors(options => options.WithOrigins("http://localhost:3000").AllowAnyMethod());
 
             app.UseStaticFiles();

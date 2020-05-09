@@ -1,10 +1,45 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Přehled";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Počet aktuálně hlášených dosud nevyřešených přihlášek: <span class="badge badge-primary" id="unsolved">@Model.UnsolvedCount</span></h2>
+
+<hr />
+
+<h2>10 nejstarších přijatých dosud nevyřešených přihlášek</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Zadáno</th>
+            <th>Pobočka</th>
+            <th>Pozice</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="oldest">
+        @foreach (var jobApplication in Model.OldestJobApplications)
+        {
+            <tr data-id="@jobApplication.ID">
+                <td>@jobApplication.CreatedAt.ToString("d.M.yyyy H:mm")</td>
+                <td>@jobApplication.Position.Workplace.Name</td>
+                <td>@jobApplication.Position.Name</td>
+                <td>
+                    <a href="#" class="show-text">Zobrazit text</a> |
+                    <a href="#" class="download-cv">Stáhnout životopis</a>
+                </td>
+            </tr>
+            <tr hidden>
+                <td colspan="4">@jobApplication.Text</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/index.js"></script>
+}

@@ -18,10 +18,12 @@ namespace asp_tender_be.ApiControllers
     public class JobApplicationsController : ControllerBase
     {
         private IRepository _repository;
+        private IJobApplicationsHubConnector _jobApplicationsHubConnector;
 
-        public JobApplicationsController(IRepository repository)
+        public JobApplicationsController(IRepository repository, IJobApplicationsHubConnector jobApplicationsHubConnector)
         {
             _repository = repository;
+            _jobApplicationsHubConnector = jobApplicationsHubConnector;
         }
 
         // POST: api/JobApplications
@@ -39,13 +41,31 @@ namespace asp_tender_be.ApiControllers
             {
                 var jobApplication = new JobApplication { PositionID = form.PositionID, Text = form.Text, Email = form.Email, Phone = form.Phone, CreatedAt = DateTime.Now };
 
+                // @TODO save also file name and mime type to db!!
                 await form.Cv.CopyToAsync(memoryStream);
                 jobApplication.Cv = memoryStream.ToArray();
 
                 _repository.InsertJobApplication(jobApplication);
                 await _repository.Save();
+
+                await _jobApplicationsHubConnector.RefreshOverviewViaHub();
+
                 return StatusCode(201, new { id = jobApplication.ID });
             }
+        }
+
+        //GET api/JobApplications/{id}/Cv
+        [HttpGet("{id}/Cv")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var jobApplication = await _repository.GetJobApplicationByID(id);
+
+            if (jobApplication == null)
+            {
+                return NotFound();
+            }
+
+            return new FileContentResult(jobApplication.Cv, "application/octet-stream");
         }
     }
 }
