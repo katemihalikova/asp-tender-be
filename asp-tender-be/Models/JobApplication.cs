@@ -13,6 +13,8 @@ namespace asp_tender_be.Models
         [Required]
         public int PositionID { get; set; }
 
+        public int? JobApplicationAnswerID { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 
@@ -32,5 +34,6 @@ namespace asp_tender_be.Models
         public byte[] Cv { get; set; }
 
         public virtual Position Position { get; set; }
+        public virtual JobApplicationAnswer JobApplicationAnswer { get; set; }
     }
 }

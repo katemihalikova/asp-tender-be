@@ -1,0 +1,60 @@
+﻿@page
+@model JobApplicationAnswerModel
+
+@{
+    ViewData["Title"] = "Odpověď na přihlášku";
+}
+
+<h2>Odpověď na přihlášku</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p class="card-text">@Model.JobApplication.Text</p>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <strong>Zadáno</strong><br />
+            @Model.JobApplication.CreatedAt.ToString("d.M.yyyy H:mm")
+        </li>
+        <li class="list-group-item">
+            <strong>Email</strong><br />
+            @Model.JobApplication.Email
+        </li>
+        <li class="list-group-item">
+            <strong>Telefon</strong><br />
+            @Model.JobApplication.Phone
+        </li>
+    </ul>
+    <div class="card-body">
+        <a href="/api/JobApplications/@Model.JobApplication.ID/Cv" class="card-link" target="_blank">Stáhnout životopis</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="JobApplicationAnswer.Text" class="control-label"></label>
+                <textarea asp-for="JobApplicationAnswer.Text" class="form-control"></textarea>
+                <span asp-validation-for="JobApplicationAnswer.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="JobApplicationAnswer.Accepted" /> Přijato
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Odeslat" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Zpět</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

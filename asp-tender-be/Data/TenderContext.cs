@@ -16,5 +16,6 @@ namespace asp_tender_be.Data
         public DbSet<Workplace> Workplaces { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<JobApplicationAnswer> JobApplicationAnswer { get; set; }
     }
 }

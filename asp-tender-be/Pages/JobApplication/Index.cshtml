@@ -1,0 +1,39 @@
+﻿@page
+@model JobApplicationIndexModel
+
+@{
+    ViewData["Title"] = "Přihlášky";
+}
+
+<h2>Nevyřešené přihlášky (celkem @Model.JobApplications.Count())</h2>
+
+@if (@Model.JobApplications.Count() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Zadáno</th>
+                <th>Pobočka</th>
+                <th>Pozice</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.JobApplications)
+            {
+                <tr>
+                    <td>@item.CreatedAt.ToString("d.M.yyyy H:mm")</td>
+                    <td>@item.Position.Workplace.Name</td>
+                    <td>@item.Position.Name</td>
+                    <td>
+                        <a asp-page="./Answer" asp-route-id="@item.ID">Odpovědět</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <em>Žádné čekající přihlášky.</em>
+}

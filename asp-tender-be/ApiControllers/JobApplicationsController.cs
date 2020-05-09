@@ -58,7 +58,7 @@ namespace asp_tender_be.ApiControllers
         [HttpGet("{id}/Cv")]
         public async Task<IActionResult> Download(int id)
         {
-            var jobApplication = await _repository.GetJobApplicationByID(id);
+            var jobApplication = await _repository.GetPendingJobApplicationByID(id);
 
             if (jobApplication == null)
             {

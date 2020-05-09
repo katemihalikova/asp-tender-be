@@ -42,26 +42,31 @@ namespace asp_tender_be.Services
         }
 
         public async Task<IEnumerable<JobApplication>> GetPendingJobApplications()
-            // @TODO filter only pending ones
         {
             return await _context.JobApplications
                 .Include(j => j.Position)
                     .ThenInclude(p => p.Workplace)
+                .Where(j => j.JobApplicationAnswerID == null)
                 .OrderBy(j => j.CreatedAt)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public async Task<JobApplication> GetJobApplicationByID(int id)
+        public async Task<JobApplication> GetPendingJobApplicationByID(int id)
         {
             return await _context.JobApplications
-                .AsNoTracking()
+                .Where(j => j.JobApplicationAnswerID == null)
                 .FirstOrDefaultAsync(p => p.ID == id);
         }
 
         public void InsertJobApplication(JobApplication jobApplication)
         {
             _context.Add(jobApplication);
+        }
+
+        public void InsertJobApplicationAnswer(JobApplicationAnswer jobApplicationAnswer)
+        {
+            _context.Add(jobApplicationAnswer);
         }
 
         public async Task Save()
