@@ -9,6 +9,8 @@ namespace asp_tender_be.Services
     {
         Task<IEnumerable<Workplace>> GetWorkplaces();
         Task<IEnumerable<Position>> GetPositionsByWorkplaceID(int workplaceID);
+        Task<Position> GetPositionByID(int positionID);
+        void InsertJobApplication(JobApplication jobApplication);
         Task Save();
     }
 }

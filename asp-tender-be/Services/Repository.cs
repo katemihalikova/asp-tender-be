@@ -34,6 +34,18 @@ namespace asp_tender_be.Services
                 .ToListAsync();
         }
 
+        public async Task<Position> GetPositionByID(int id)
+        {
+            return await _context.Positions
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.ID == id);
+        }
+
+        public void InsertJobApplication(JobApplication jobApplication)
+        {
+            _context.Add(jobApplication);
+        }
+
         public async Task Save()
         {
             await _context.SaveChangesAsync();
