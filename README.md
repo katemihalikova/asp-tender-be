@@ -12,8 +12,6 @@ dotnet run
 
 no tests :(
 
-<!--
 ```
 dotnet test
 ```
--->

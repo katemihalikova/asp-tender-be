@@ -28,7 +28,7 @@ namespace asp_tender_be.ApiControllers
 
         // POST: api/JobApplications
         [HttpPost]
-        public async Task<ActionResult<JobApplication>> PostJobApplication([FromForm] PostJobApplicationModel form)
+        public async Task<ActionResult<object>> PostJobApplication([FromForm] PostJobApplicationModel form)
         {
             var position = await _repository.GetPositionByID(form.PositionID);
 
