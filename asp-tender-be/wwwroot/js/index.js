@@ -3,19 +3,30 @@
 let connection = new signalR.HubConnectionBuilder().withUrl("/jobApplicationsHub").build();
 let $unsolved = $("#unsolved");
 let $oldest = $("#oldest");
+let $none = $("#none");
 
 connection.on("RefreshOverview", ({ count, oldest }) => {
     $unsolved.text(count);
-    $oldest.empty();
-    oldest.forEach(jobApplication => {
-        let $row = $("<tr></tr>").appendTo($oldest).data("id", jobApplication.id);
-        $("<td></td>").text(jobApplication.createdAt).appendTo($row);
-        $("<td></td>").text(jobApplication.workplace).appendTo($row);
-        $("<td></td>").text(jobApplication.position).appendTo($row);
-        $(`<td><a href="#" class="show-text">Zobrazit text</a> | <a href="#" class="download-cv">Stáhnout životopis</a></td>`).appendTo($row);
-        let $textRow = $("<tr hidden></tr>").appendTo($oldest);
-        $(`<td colspan="4"></td>`).text(jobApplication.text).appendTo($textRow);
-    });
+    let $oldestBody = $oldest.children("tbody");
+    $oldestBody.empty();
+
+    if (count === 0) {
+        $oldest.attr("hidden", "");
+        $none.removeAttr("hidden");
+    } else {
+        $oldest.removeAttr("hidden");
+        $none.attr("hidden", "");
+
+        oldest.forEach(jobApplication => {
+            let $row = $("<tr></tr>").appendTo($oldestBody).data("id", jobApplication.id);
+            $("<td></td>").text(jobApplication.createdAt).appendTo($row);
+            $("<td></td>").text(jobApplication.workplace).appendTo($row);
+            $("<td></td>").text(jobApplication.position).appendTo($row);
+            $(`<td><a href="#" class="show-text">Zobrazit text</a> | <a href="#" class="download-cv">Stáhnout životopis</a></td>`).appendTo($row);
+            let $textRow = $("<tr hidden></tr>").appendTo($oldestBody);
+            $(`<td colspan="4"></td>`).text(jobApplication.text).appendTo($textRow);
+        });
+    }
 });
 
 $oldest.on("click", ".show-text", (event) => {

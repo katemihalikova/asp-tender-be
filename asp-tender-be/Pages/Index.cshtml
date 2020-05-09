@@ -10,7 +10,7 @@
 
 <h2>10 nejstarších přijatých dosud nevyřešených přihlášek</h2>
 
-<table class="table">
+<table class="table" id="oldest" @(@Model.UnsolvedCount == 0 ? "hidden" : "")>
     <thead>
         <tr>
             <th>Zadáno</th>
@@ -19,7 +19,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody id="oldest">
+    <tbody>
         @foreach (var jobApplication in Model.OldestJobApplications)
         {
             <tr data-id="@jobApplication.ID">
@@ -37,6 +37,8 @@
         }
     </tbody>
 </table>
+
+<em id="none" @(@Model.UnsolvedCount > 0 ? "hidden" : "")>Žádné čekající přihlášky.</em>
 
 @section Scripts
 {
